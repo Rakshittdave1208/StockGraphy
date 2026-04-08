@@ -28,7 +28,7 @@ export default function Dashboard() {
   const isUp = (quote?.changePct ?? 0) >= 0;
 
   return (
-    <div className="flex flex-col gap-6 max-w-[1200px]">
+    <div className="flex flex-col gap-6 max-w-300">
 
       {/* ── Top row: header + sentiment ───────────────── */}
       <div className="flex items-start justify-between gap-6 flex-wrap">

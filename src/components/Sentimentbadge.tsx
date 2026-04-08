@@ -58,7 +58,7 @@ export default function SentimentBadge({
         <span className={`font-semibold text-sm ${textColor}`}>
           {sentiment} {label.replace("Bullish ", "").replace("Bearish ", "")}
         </span>
-        <span className="text-zinc-600 text-xs mt-0.5 leading-snug max-w-[180px]">
+        <span className="text-zinc-600 text-xs mt-0.5 leading-snug max-w-45">
           {sub}
         </span>
       </div>
