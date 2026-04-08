@@ -1,22 +1,6 @@
-import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-type IndexId = "sensex" | "nifty50" | "banknifty" | "niftynext50" | "finnifty";
-
-interface IndexItem {
-  id: IndexId;
-  label: string;
-  ltp: number;
-  changePct: number;
-}
-
-const INDICES: IndexItem[] = [
-  { id: "sensex", label: "SENSEX", ltp: 72480.5, changePct: 0.47 },
-  { id: "nifty50", label: "NIFTY 50", ltp: 21928.3, changePct: 0.45 },
-  { id: "banknifty", label: "BANKNIFTY", ltp: 46512.75, changePct: -0.27 },
-  { id: "niftynext50", label: "NIFTY NEXT 50", ltp: 57840.2, changePct: 0.31 },
-  { id: "finnifty", label: "FINNIFTY", ltp: 20345.6, changePct: -0.18 },
-];
+import { useIndexQuote } from "@/hooks/useIndexQuote";
+import { INDEX_IDS, INDEX_LABELS, useIndexStore } from "@/store";
 
 const NAV_ITEMS = [
   { label: "Dashboard", to: "/dashboard", icon: <DashIcon /> },
@@ -105,10 +89,31 @@ function SettingsIcon() {
   );
 }
 
+function formatLtp(value: number | undefined): string {
+  if (value == null) {
+    return "--";
+  }
+
+  return value.toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export default function Sidebar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [activeIndex, setActiveIndex] = useState<IndexId>("nifty50");
+  const activeIndex = useIndexStore((state) => state.selectedIndex);
+  const quotes = useIndexStore((state) => state.quotes);
+  const quoteMeta = useIndexStore((state) => state.quoteMeta);
+  const socketConnected = useIndexStore((state) => state.socketConnected);
+  const setSelectedIndex = useIndexStore((state) => state.setSelectedIndex);
+
+  useIndexQuote("sensex");
+  useIndexQuote("nifty50");
+  useIndexQuote("banknifty");
+  useIndexQuote("niftynext50");
+  useIndexQuote("finnifty");
 
   return (
     <aside className="flex h-full w-55 shrink-0 flex-col border-r border-zinc-800/60 bg-[#0a0e13]">
@@ -122,17 +127,33 @@ export default function Sidebar() {
       <p className="px-5 pb-2 pt-4 text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-600">
         Live Indices
       </p>
+      <div className="px-5 pb-3">
+        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-600">
+          <span className={`h-1.5 w-1.5 rounded-full ${socketConnected ? "bg-[#00ff88]" : "bg-amber-400"}`} />
+          <span>{socketConnected ? "Socket streaming" : "REST fallback"}</span>
+        </div>
+      </div>
 
       <div className="flex flex-col gap-0.5 px-2.5">
-        {INDICES.map((inst) => {
-          const isActive = activeIndex === inst.id;
-          const isUp = inst.changePct >= 0;
+        {INDEX_IDS.map((indexId) => {
+          const isActive = activeIndex === indexId;
+          const quote = quotes[indexId];
+          const meta = quoteMeta[indexId];
+          const isUp = (quote?.changePct ?? 0) >= 0;
+          const flashClass =
+            meta?.source === "socket"
+              ? meta.direction === "down"
+                ? "live-price-down"
+                : meta.direction === "up"
+                  ? "live-price-up"
+                  : "live-price-flat"
+              : "";
 
           return (
             <button
-              key={inst.id}
+              key={indexId}
               onClick={() => {
-                setActiveIndex(inst.id);
+                setSelectedIndex(indexId);
                 navigate("/dashboard");
               }}
               className={[
@@ -152,12 +173,15 @@ export default function Sidebar() {
                   isActive ? "text-[#00ff88]" : "text-zinc-300",
                 ].join(" ")}
               >
-                {inst.label}
+                {INDEX_LABELS[indexId]}
               </p>
 
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[11px] font-bold text-white">
-                  {inst.ltp.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                <span
+                  key={`${indexId}:${meta?.updatedAt ?? 0}`}
+                  className={`font-mono text-[11px] font-bold text-white ${flashClass}`.trim()}
+                >
+                  {formatLtp(quote?.ltp)}
                 </span>
                 <span
                   className={[
@@ -168,7 +192,7 @@ export default function Sidebar() {
                   ].join(" ")}
                 >
                   {isUp ? "+" : ""}
-                  {inst.changePct.toFixed(2)}%
+                  {(quote?.changePct ?? 0).toFixed(2)}%
                 </span>
               </div>
             </button>

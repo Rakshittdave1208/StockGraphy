@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+@keyframes live-price-up {
+  0% {
+    color: #8fffd0;
+    text-shadow: 0 0 18px rgba(0, 255, 136, 0.45);
+    transform: translateY(-1px);
+  }
+
+  100% {
+    color: inherit;
+    text-shadow: none;
+    transform: translateY(0);
+  }
+}
+
+@keyframes live-price-down {
+  0% {
+    color: #ff8d8d;
+    text-shadow: 0 0 18px rgba(255, 79, 79, 0.35);
+    transform: translateY(1px);
+  }
+
+  100% {
+    color: inherit;
+    text-shadow: none;
+    transform: translateY(0);
+  }
+}
+
+@keyframes live-price-flat {
+  0% {
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
+  }
+
+  100% {
+    text-shadow: none;
+  }
+}
+
+.live-price-up {
+  animation: live-price-up 720ms ease-out;
+}
+
+.live-price-down {
+  animation: live-price-down 720ms ease-out;
+}
+
+.live-price-flat {
+  animation: live-price-flat 720ms ease-out;
+}

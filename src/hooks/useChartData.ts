@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import {
+  getCandlesKey,
   useIndexStore,
   type IndexId,
   type TimeRange,
@@ -18,7 +19,7 @@ async function fetchCandles(
 
 export function useChartData(indexId: IndexId, range: TimeRange) {
   const setCandles = useIndexStore((s) => s.setCandles);
-  const cached = useIndexStore((s) => s.getCandles(indexId, range));
+  const cached = useIndexStore((s) => s.candles[getCandlesKey(indexId, range)]);
 
   const query = useQuery({
     queryKey:        ["candles", indexId, range],
@@ -31,5 +32,5 @@ export function useChartData(indexId: IndexId, range: TimeRange) {
     if (query.data) setCandles(indexId, range, query.data);
   }, [query.data, indexId, range, setCandles]);
 
-  return query;
+  return { ...query, data: cached ?? query.data };
 }

@@ -1,8 +1,11 @@
 import { Outlet } from "react-router-dom";
+import { useSocket } from "@/hooks/useSocket";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 export default function AppLayout() {
+  useSocket();
+
   return (
     <div className="flex h-screen overflow-hidden bg-zinc-950">
       <Sidebar />

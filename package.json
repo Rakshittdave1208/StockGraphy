@@ -27,12 +27,13 @@
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2",
     "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
     "ws": "^8.20.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.2",
     "@eslint/js": "^9.39.4",
+    "@tailwindcss/postcss": "^4.2.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^24.12.0",

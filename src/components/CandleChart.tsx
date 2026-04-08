@@ -20,6 +20,7 @@ export default function CandleChart({ indexId, range }: CandleChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+  const renderedDataRef = useRef<CandlestickData<UTCTimestamp>[]>([]);
 
   const { data: candles, isLoading } = useChartData(indexId, range);
 
@@ -90,6 +91,7 @@ export default function CandleChart({ indexId, range }: CandleChartProps) {
       chart.remove();
       chartRef.current = null;
       seriesRef.current = null;
+      renderedDataRef.current = [];
     };
   }, []);
 
@@ -98,8 +100,31 @@ export default function CandleChart({ indexId, range }: CandleChartProps) {
       return;
     }
 
-    seriesRef.current.setData(chartData);
-    chartRef.current?.timeScale().fitContent();
+    const previousData = renderedDataRef.current;
+    const previousLast = previousData[previousData.length - 1];
+    const nextLast = chartData[chartData.length - 1];
+    const shouldReset =
+      previousData.length === 0 ||
+      chartData.length === 0 ||
+      chartData.length < previousData.length ||
+      chartData.length - previousData.length > 1 ||
+      previousData[0]?.time !== chartData[0]?.time;
+
+    if (shouldReset) {
+      seriesRef.current.setData(chartData);
+      chartRef.current?.timeScale().fitContent();
+      renderedDataRef.current = chartData;
+      return;
+    }
+
+    if (nextLast && previousLast?.time === nextLast.time) {
+      seriesRef.current.update(nextLast);
+    } else if (nextLast) {
+      seriesRef.current.update(nextLast);
+      chartRef.current?.timeScale().scrollToRealTime();
+    }
+
+    renderedDataRef.current = chartData;
   }, [chartData]);
 
   return (
