@@ -1,5 +1,6 @@
 import { useIndexStore } from "@/store/index";
 import { useIndexQuote } from "@/hooks/useIndexQuote";
+import { formatInr } from "@/lib/currency";
 import IndexHeader    from "@/components/IndexHeader";
 import StatsCard      from "@/components/StatsCard";
 import TimeRangeTabs  from "@/components/TimeRangeTabs";
@@ -7,10 +8,7 @@ import CandleChart    from "@/components/CandleChart";
 import SentimentBadge from "@/components/Sentimentbadge";
 
 function fmt(n: number): string {
-  return n.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return formatInr(n);
 }
 
 export default function Dashboard() {

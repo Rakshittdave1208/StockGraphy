@@ -1,5 +1,85 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: dark;
+  --scrollbar-size: 10px;
+  --scrollbar-track: rgba(24, 24, 27, 0.92);
+  --scrollbar-thumb: linear-gradient(180deg, rgba(63, 63, 70, 0.92), rgba(0, 255, 136, 0.24));
+  --scrollbar-thumb-hover: linear-gradient(180deg, rgba(82, 82, 91, 0.98), rgba(0, 255, 136, 0.38));
+  --scrollbar-border: rgba(0, 255, 136, 0.08);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 136, 0.05), transparent 28%),
+    #09090b;
+  color: #f4f4f5;
+  scrollbar-gutter: stable;
+}
+
+html {
+  scrollbar-color: rgba(82, 82, 91, 0.98) rgba(24, 24, 27, 0.92);
+  scrollbar-width: thin;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-scrollbar {
+  scrollbar-gutter: stable;
+  scrollbar-color: rgba(82, 82, 91, 0.98) rgba(24, 24, 27, 0.92);
+  scrollbar-width: thin;
+}
+
+.app-scrollbar::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+.app-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+.app-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.app-scroll-surface {
+  position: relative;
+}
+
+.app-scroll-surface::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 1px;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, var(--scrollbar-border), transparent);
+  pointer-events: none;
+}
+
 @keyframes live-price-up {
   0% {
     color: #8fffd0;

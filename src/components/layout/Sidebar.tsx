@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useIndexQuote } from "@/hooks/useIndexQuote";
+import { formatInr } from "@/lib/currency";
 import { INDEX_IDS, INDEX_LABELS, useIndexStore } from "@/store";
 
 const NAV_ITEMS = [
@@ -94,10 +95,7 @@ function formatLtp(value: number | undefined): string {
     return "--";
   }
 
-  return value.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return formatInr(value);
 }
 
 export default function Sidebar() {
@@ -116,7 +114,7 @@ export default function Sidebar() {
   useIndexQuote("finnifty");
 
   return (
-    <aside className="flex h-full w-55 shrink-0 flex-col border-r border-zinc-800/60 bg-[#0a0e13]">
+    <aside className="app-scrollbar app-scroll-surface flex h-full w-55 shrink-0 flex-col overflow-y-auto border-r border-zinc-800/60 bg-[#0a0e13]">
       <div className="border-b border-zinc-800/60 px-5 pb-4 pt-5">
         <p className="font-mono text-sm font-bold tracking-wide text-white">StockGraphy</p>
         <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-600">

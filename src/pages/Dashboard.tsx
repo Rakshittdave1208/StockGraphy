@@ -3,13 +3,11 @@ import IndexHeader from "@/components/IndexHeader";
 import StatsCard from "@/components/StatsCard";
 import TimeRangeTabs from "@/components/TimeRangeTabs";
 import { useIndexQuote } from "@/hooks/useIndexQuote";
+import { formatInr, formatSignedInr } from "@/lib/currency";
 import { useIndexStore } from "@/store";
 
 function fmtNumber(value: number | undefined): string {
-  return (value ?? 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return formatInr(value);
 }
 
 export default function Dashboard() {
@@ -37,7 +35,7 @@ export default function Dashboard() {
         <StatsCard
           label="Daily Change"
           value={`${quote?.changePct?.toFixed(2) ?? "0.00"}%`}
-          sub={fmtNumber(quote?.change)}
+          sub={formatSignedInr(quote?.change)}
           up={(quote?.changePct ?? 0) >= 0}
         />
         <StatsCard

@@ -11,7 +11,7 @@ export default function AppLayout() {
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="app-scrollbar app-scroll-surface flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
       </div>

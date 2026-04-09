@@ -1,3 +1,5 @@
+import { formatInr, formatSignedInr } from "@/lib/currency";
+
 export default function Portfolio() {
   return (
     <div className="flex flex-col gap-6">
@@ -15,7 +17,7 @@ export default function Portfolio() {
             Total Net Worth
           </p>
           <p className="font-mono text-white font-bold text-3xl">
-            $1,248,692
+            {formatInr(1_248_692)}
           </p>
           <p className="text-[#00ff88] text-sm font-mono mt-1">+4%</p>
         </div>
@@ -24,7 +26,7 @@ export default function Portfolio() {
             Total P&amp;L (Today)
           </p>
           <p className="font-mono text-[#00ff88] font-bold text-3xl">
-            +$12,450.12
+            {formatSignedInr(12_450.12)}
           </p>
           <p className="text-zinc-500 text-sm font-mono mt-1">Real-time tracking active</p>
         </div>

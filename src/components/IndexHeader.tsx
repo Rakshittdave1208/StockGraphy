@@ -1,15 +1,9 @@
 import { useIndexQuote } from "@/hooks/useIndexQuote";
+import { formatInr, formatSignedInr } from "@/lib/currency";
 import { INDEX_LABELS, type IndexId } from "@/store";
 
 interface IndexHeaderProps {
   indexId: IndexId;
-}
-
-function fmt(value: number): string {
-  return value.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
 }
 
 export default function IndexHeader({ indexId }: IndexHeaderProps) {
@@ -34,13 +28,12 @@ export default function IndexHeader({ indexId }: IndexHeaderProps) {
       ) : (
         <div className="flex items-end gap-4">
           <span className="font-mono text-4xl font-bold tracking-tight text-white">
-            {fmt(quote?.ltp ?? 0)}
+            {formatInr(quote?.ltp)}
           </span>
 
           <div className="mb-1 flex items-center gap-2">
             <span className={`font-mono text-sm font-bold ${isUp ? "text-[#00ff88]" : "text-red-400"}`}>
-              {isUp ? "+" : ""}
-              {fmt(quote?.change ?? 0)}
+              {formatSignedInr(quote?.change)}
             </span>
 
             <span
