@@ -42,7 +42,7 @@ export default function IndexHeader({ indexId }: IndexHeaderProps) {
                 isUp ? "bg-[#00ff88]/10 text-[#00ff88]" : "bg-red-500/10 text-red-400",
               ].join(" ")}
             >
-              {isUp ? "▲" : "▼"} {Math.abs(quote?.changePct ?? 0).toFixed(2)}%
+              {isUp ? "+" : "-"} {Math.abs(quote?.changePct ?? 0).toFixed(2)}%
             </span>
           </div>
         </div>
